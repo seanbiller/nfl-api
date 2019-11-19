@@ -1,6 +1,11 @@
 const express = require('express')
-const teams = require('./teams.json')
+const models = require('./models')
+
+// const teams = require('./teams.json')
+// const TeamsModel = require('./models/teams.js')
+
 const app = express()
+
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
@@ -9,7 +14,9 @@ const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`Listening on ${port}`))
 
 
-app.get('/teams', (request, response) => {
+app.get('/teams', async (request, response) => {
+    const teams = await models.Teams.findAll()
+
     response.send(teams)
 })
 
@@ -39,12 +46,9 @@ app.post('/teams', (request, response) => {
     response.send(team)
 })
 // {
-//     "id": 0,
 //     "location": "0 Main St",
 //     "mascot": "Zero",
 //     "abbreviation": "zero",
-//     "conference": "AFC",
-//     "division": "East of Nowhere"
 // }
 
 app.all('*', (request, response) => {
